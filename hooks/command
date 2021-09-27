@@ -3,7 +3,11 @@
 set -euo pipefail
 
 install_reporter() {
-  if [ -f ./cc-test-reporter ]; then
+  local_path=`which cc-test-reporter`
+  if [ $? -eq 0 ]; then
+    printf -- "--- :codeclimate: Using in-path binary cc-test-reporter"
+    cp $local_path ./cc-test-reporter
+  elif [ -f ./cc-test-reporter ]; then
     printf -- "--- :codeclimate: Using local binary ./cc-test-reporter"
   else
     printf -- "--- :codeclimate: Installing %s cc-test-reporter\\n" "${BUILDKITE_PLUGIN_CODECLIMATE_TEST_REPORTER_VERSION}"
